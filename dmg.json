@@ -1,0 +1,9 @@
+{
+  "title": "WhatsApp Desktop Reloaded",
+  "icon": "assets/osx/whatsapp.icns",
+  "background": "assets/osx/background-dmg.png",
+  "contents": [
+    { "x": 420, "y": 290, "type": "link", "path": "/Applications" },
+    { "x": 174, "y": 290, "type": "file", "path": "dist/WhatsApp-darwin-x64/WhatsApp.app" }
+  ]
+}
