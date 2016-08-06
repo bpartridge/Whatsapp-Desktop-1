@@ -86,7 +86,7 @@
                         if (focusedWindow)
                             focusedWindow.toggleDevTools();
                     }
-                },
+                }
             ]
         },
         {
@@ -102,6 +102,31 @@
                     label: 'Close',
                     accelerator: 'CmdOrCtrl+W',
                     role: 'close'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Next Chat',
+                    accelerator: 'CmdOrCtrl+}',
+                    click: function(item, focusedWindow) {
+                        focusedWindow && focusedWindow.webContents.executeJavaScript(
+                            "var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/(\\d+)%/)[1]);" +
+                            "var x2 = x + 100; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);" +
+                            "document.querySelector('[style*=\" '+x2+'%\"] .chat-body').dispatchEvent(e);"
+                        )
+                    }
+                },
+                {
+                    label: 'Previous Chat',
+                    accelerator: 'CmdOrCtrl+{',
+                    click: function(item, focusedWindow) {
+                        focusedWindow && focusedWindow.webContents.executeJavaScript(
+                            "var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/(\\d+)%/)[1]);" +
+                            "var x2 = x - 100; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);" +
+                            "document.querySelector('[style*=\" '+x2+'%\"] .chat-body').dispatchEvent(e);"
+                        )
+                    }
                 }
             ]
         },
