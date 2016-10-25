@@ -123,22 +123,30 @@
                     label: 'Next Chat',
                     accelerator: 'CmdOrCtrl+}',
                     click: function(item, focusedWindow) {
-                        focusedWindow && focusedWindow.webContents.executeJavaScript(
-                            "var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/(\\d+)%/)[1]);" +
-                            "var x2 = x + 100; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);" +
-                            "document.querySelector('[style*=\" '+x2+'%\"] .chat-body').dispatchEvent(e);"
-                        )
+                        // NOTE: must escape backslashes in regexes even when using template string
+                        focusedWindow && focusedWindow.webContents.executeJavaScript(`
+                            try {
+                                console.log(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/translate3d\\(\\w+/));
+                                var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/translate3d\\(\\w+,\\s*(\\d+)px/)[1]);
+                                var x2 = x + 72; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);
+                                document.querySelector('[style*=" '+x2+'px,"] .chat-body').dispatchEvent(e);
+                            } catch (e) { console.error(e); }
+                        `, true /* user initiated */)
                     }
                 },
                 {
                     label: 'Previous Chat',
                     accelerator: 'CmdOrCtrl+{',
                     click: function(item, focusedWindow) {
-                        focusedWindow && focusedWindow.webContents.executeJavaScript(
-                            "var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/(\\d+)%/)[1]);" +
-                            "var x2 = x - 100; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);" +
-                            "document.querySelector('[style*=\" '+x2+'%\"] .chat-body').dispatchEvent(e);"
-                        )
+                        // NOTE: must escape backslashes in regexes even when using template string
+                        focusedWindow && focusedWindow.webContents.executeJavaScript(`
+                            try {
+                                console.log(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/translate3d\\(\\w+/));
+                                var x = parseInt(document.querySelector('.active.chat').parentNode.parentNode.style.transform.match(/translate3d\\(\\w+,\\s*(\\d+)px/)[1]);
+                                var x2 = x - 72; var e = document.createEvent('Events'); e.initEvent('mousedown', true, false);
+                                document.querySelector('[style*=" '+x2+'px,"] .chat-body').dispatchEvent(e);
+                            } catch (e) { console.error(e); }
+                        `, true /* user initiated */)
                     }
                 }
             ]
