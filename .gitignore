@@ -14,3 +14,5 @@ debian/whatsapp-desktop/
 debian/files
 dummy.tar.bz2
 rpmbuild/
+.deploy/aur-repo
+.deploy/deploy_rsa
