@@ -5,32 +5,32 @@ os:
 - linux
 - osx
 before_install:
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get update
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install -y devscripts build-essential lintian dh-make rpm
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew update && brew install node
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y devscripts build-essential lintian dh-make rpm
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install node
 install:
 - npm i -g npm@5.2
 - npm install
 - cd app/ && npm install && cd ..
 before_script:
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && rm -rf rpmbuild/
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && mkdir -p rpmbuild/SOURCES
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && tar -cjf rpmbuild/SOURCES/dummy.tar.bz2 readme.md
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm -rf rpmbuild/
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir -p rpmbuild/SOURCES
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -cjf rpmbuild/SOURCES/dummy.tar.bz2 readme.md
 script:
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && npm run build:osx
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && npm run build:linux
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && debuild -b -uc -us
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && npm run build:linuxarmv7l
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && debuild -b -uc -us -aarmhf
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && cd rpmbuild && rpmbuild --define "_topdir $(pwd)/" -bb ../whatsapp-desktop.spec && cd ..
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:osx
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:linux
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then debuild -b -uc -us
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:linuxarmv7l
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then debuild -b -uc -us -aarmhf
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd rpmbuild && rpmbuild --define "_topdir $(pwd)/" -bb ../whatsapp-desktop.spec && cd ..
 before_deploy:
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install -y zip tar gzip
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew install zip
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && cd dist/ && tar czf WhatsApp-linux-x64.tar.gz WhatsApp-linux-x64/ && tar czf WhatsApp-linux-armv7l.tar.gz WhatsApp-linux-armv7l/ && cd ..
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && cd dist/ && zip -r WhatsApp-darwin-x64.zip WhatsApp-darwin-x64/ && cd ..
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && export RELEASE_AMD64_PKG_FILE=$(ls ../whatsapp-desktop*amd64.deb)
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && export RELEASE_ARM_PKG_FILE=$(ls ../whatsapp-desktop*armhf.deb)
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && export RELEASE_AMD64_RPM_FILE=$(ls rpmbuild/RPMS/x86_64/*.rpm)
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y zip tar gzip
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install zip
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd dist/ && tar czf WhatsApp-linux-x64.tar.gz WhatsApp-linux-x64/ && tar czf WhatsApp-linux-armv7l.tar.gz WhatsApp-linux-armv7l/ && cd ..
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd dist/ && zip -r WhatsApp-darwin-x64.zip WhatsApp-darwin-x64/ && cd ..
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_AMD64_PKG_FILE=$(ls ../whatsapp-desktop*amd64.deb)
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_ARM_PKG_FILE=$(ls ../whatsapp-desktop*armhf.deb)
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export RELEASE_AMD64_RPM_FILE=$(ls rpmbuild/RPMS/x86_64/*.rpm)
 deploy:
   provider: releases
   skip_cleanup: true
