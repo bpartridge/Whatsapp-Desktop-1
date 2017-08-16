@@ -40,6 +40,13 @@ For all other platforms: you can download ZIP files from [latest release page](h
 
 ## Known issues
 
+### Build error with NPM 5.3
+
+You should use NPM 5.2 to build Whatsapp-Desktop due to [this issue on NPM itself](https://github.com/npm/npm/issues/17781). You can downgrade to 5.2 with:
+
+    npm i -g npm@5.2
+
+
 ### Fonts rendering as rectangles after upgrade
 
 Apparently it's caused by an issue of Electron with Pango. Downgrade Pango to `1.40.5` should temporarily fix this (until upstream bugfix by Electron devs). See https://github.com/Enrico204/Whatsapp-Desktop/issues/13
@@ -58,16 +65,8 @@ To build from the source, run the following commands:
     cd ..
     npm run build:platform
 
-where `build:platform` can be `build:linux` if you want to build only for Linux, `build:osx` for OSX only, `build:win` for Windows only, or simply `build` to build for all platforms.
+where `build:platform` can be `build:linux` if you are on Linux, `build:osx` on OSX, `build:win` on Windows.
 
 You'll find artifacts into `dist/` directory.
 
-### Cross-build for Windows (from Linux/macOS)
-
-Wine needs to be installed. On macOS, it is installable via Homebrew:  
-
-    brew install wine
-
-On GNU/Linux you can install `wine` from your distro package manager.
-
-Please mind that `wine` requires an Xorg display, so you should set correctly your DISPLAY env var (you can use `Xvfb` if you don't have/want a real Xorg display running)
+**Note**: because of some native packages, cross-build (ie. build on Linux for Windows) is not possible anymore.

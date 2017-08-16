@@ -1,6 +1,12 @@
 (function () {
 
     const {ipcRenderer} = require('electron');
+    var gt = require('electron').remote.getGlobal("gt");
+
+    const {SpellCheckHandler} = require('electron-spellchecker');
+    const {ContextMenuListener} = require('electron-spellchecker');
+    const {ContextMenuBuilder} = require('electron-spellchecker');
+
     var updatePhoneInfoInterval = null;
 
     function updatePhoneInfo() {
@@ -34,6 +40,17 @@
     console.log("Waiting for DOMContentLoaded");
     document.addEventListener('DOMContentLoaded', function () {
         console.log("DOMContentLoaded event");
+
+        window.spellCheckHandler = new SpellCheckHandler();
+        window.spellCheckHandler.attachToInput();
+
+        window.spellCheckHandler.switchLanguage(gt.locale);
+
+        let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
+        let contextMenuListener = new ContextMenuListener((info) => {
+            contextMenuBuilder.showPopupMenu(info);
+        });
+
         updatePhoneInfoInterval = setInterval(updatePhoneInfo, 500);
 
         // pass in the target node, as well as the observer options
