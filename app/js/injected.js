@@ -1,4 +1,6 @@
 (function () {
+    var audioCss = document.createElement("style");
+    audioCss.setAttribute('type', 'text/css');
 
     const {ipcRenderer} = require('electron');
     var updatePhoneInfoInterval = null;
@@ -57,16 +59,21 @@
         var config = {childList: true, subtree: true};
         observer.observe(document.querySelector("body"), config);
 
+        document.head.appendChild(audioCss);
     }, false);
+
 
     setInterval(function() {
         Array.from(document.querySelectorAll('audio')).map(function(audio) {
-            audio.playbackRate = (window.audioRate || 1)
+            audio.playbackRate = (window.audioRate || 1);
         });
-        if (window.audioRate) {
-            Array.from(document.querySelectorAll('.meta-audio *:first-child')).map(function(span) {
-                span.innerHTML = window.audioRate.toFixed(1) + "x&nbsp;";
-            });
-        }
+        audioCss.innerHTML = `
+            .audio-button:after {
+                content: '${(window.audioRate || 1).toFixed(1)}x';
+                position: absolute;
+                left: 0; right: 0; bottom: -12px;
+                color: rgba(0,0,0,0.45);
+            }
+        `;
     }, 200);
 })();
