@@ -63,17 +63,25 @@
     }, false);
 
 
+    window.registeredAudioRate = undefined;
     setInterval(function() {
-        Array.from(document.querySelectorAll('audio')).map(function(audio) {
-            audio.playbackRate = (window.audioRate || 1);
-        });
-        audioCss.innerHTML = `
-            .audio-button:after {
-                content: '${(window.audioRate || 1).toFixed(1)}x';
-                position: absolute;
-                left: 0; right: 0; bottom: -12px;
-                color: rgba(0,0,0,0.45);
+        if (window.audioRate) {
+            // Need to do this every tick as new audio elements may have appeared
+            Array.from(document.querySelectorAll('audio')).map(function(audio) {
+                audio.playbackRate = window.audioRate;
+            });
+            // But changing CSS only needs to be done on change
+            if (window.audioRate !== window.registeredAudioRate) {
+                window.registeredAudioRate = window.audioRate;
+                audioCss.innerHTML = `
+                    [data-icon*="audio-"]:after {
+                        content: '${(window.audioRate).toFixed(1)}x';
+                        position: absolute;
+                        left: 0; right: 0; bottom: -14px;
+                        color: rgba(0,0,0,0.45);
+                    }
+                `;
             }
-        `;
+        }
     }, 200);
 })();
